@@ -8,7 +8,7 @@ final class SignUpRequest extends FormRequest
 {
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     public function rules()
@@ -16,7 +16,7 @@ final class SignUpRequest extends FormRequest
         return [
             'name'=> 'required|string|min:3',
             'email'=> 'required|email|unique:users,email',
-            'password'=> 'required|string|min:6|confirmation',
+            'password'=> 'required|string|min:6|confirmed',
         ];
     }
 }

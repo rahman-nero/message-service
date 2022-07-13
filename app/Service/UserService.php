@@ -6,6 +6,7 @@ namespace App\Service;
 
 use App\Models\User;
 use Illuminate\Contracts\Hashing\Hasher;
+use Illuminate\Database\Eloquent\Model;
 
 final class UserService
 {
@@ -16,7 +17,7 @@ final class UserService
         $this->hasher = $hasher;
     }
 
-    public function create(string $name, string $email, string $password)
+    public function create(string $name, string $email, string $password): Model
     {
         return User::query()
             ->create([
@@ -24,6 +25,19 @@ final class UserService
                 'email' => $email,
                 'password' => $this->hasher->make($password)
             ]);
+    }
+
+    public function loginCheck(string $email, string $password): Model|false
+    {
+        $user = User::query()
+            ->where('email', '=', $email)
+            ->first();
+
+        if (!$user || !$this->hasher->check($password, $user->password)) {
+            return false;
+        }
+
+        return $user;
     }
 
 }

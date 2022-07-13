@@ -26,13 +26,12 @@ final class SignUpController extends Controller
 
         $user = $this->service->create(name: $name, email: $email, password: $password);
 
-
         if (!$user) {
             // FIXME: тут нужно было вернуть 500, но почему-то в ТЗ сказано не возвращать 500
             return new JsonResponse(['code' => 400, 'message' => 'Произошла ошибка во время выполнения регистраций, пожалуйста, попробуйте позднее'], 400);
         }
 
-        $token = $user->createToken($request->token_name);
+        $token = $user->createToken('token_authenticate');
 
         return new JsonResponse(['code' => 200, 'message' =>
             [
