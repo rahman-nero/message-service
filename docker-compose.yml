@@ -1,0 +1,51 @@
+version: '3.7'
+services:
+  nginx:
+    build:
+      context: ./
+      dockerfile: docker/nginx/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www/
+      - ./docker/nginx/confs/:/etc/nginx/conf.d/
+      - ./docker/nginx/logs:/var/log/nginx/
+    ports:
+      - "8080:80"
+    links:
+      - php-fpm
+
+  mariadb:
+    image: mariadb:10.6
+    restart: unless-stopped
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_USER=user_app
+      - MYSQL_PASSWORD=app_password
+      - MYSQL_DATABASE=app
+      - TZ=Europe/Moscow
+    volumes:
+      - ./docker/running/mysql:/var/lib/mysql/
+    ports:
+      - "33006:3306"
+
+  php-fpm:
+    build:
+      context: ./
+      dockerfile: ./docker/php-fpm/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - ./:/var/www
+      - ./docker/php-fpm/www.conf:/usr/local/etc/php-fpm.d/www.conf
+      - ./docker/php-fpm/logs/:/var/log/
+
+  php-cli:
+    build:
+      context: ./
+      dockerfile: ./docker/php-cli/Dockerfile
+      args:
+        WWWUSER: ${USER}
+    restart: unless-stopped
+    tty: true
+    user: ${USER}
+    volumes:
+      - ./:/var/www

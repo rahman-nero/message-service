@@ -4,7 +4,7 @@
 /public/storage
 /storage/*.key
 /vendor
-.env
+.enva
 .env.backup
 .phpunit.result.cache
 Homestead.json
@@ -14,3 +14,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
+TODO.md
+gen
