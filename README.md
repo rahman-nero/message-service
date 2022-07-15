@@ -6,8 +6,9 @@
 
 ```
 make docker-up
-make composer-install
+make prod-install || make dev-install
 make key-generate
 make laravel-migrate
 make laravel-cache
+make chown
 ```
