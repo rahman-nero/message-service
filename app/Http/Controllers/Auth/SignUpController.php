@@ -26,10 +26,10 @@ final class SignUpController extends Controller
 
         $user = $this->service->create(name: $name, email: $email, password: $password);
 
-        if (!$user) {
-            // FIXME: тут нужно было вернуть 500, но почему-то в ТЗ сказано не возвращать 500
-            return new JsonResponse(['code' => 400, 'message' => 'Произошла ошибка во время выполнения регистраций, пожалуйста, попробуйте позднее'], 400);
-        }
+//        Не совсем понял смысл "Система не должна выдавать ошибок сервера (ошибок типа 500 Internal Server Error)."
+//        if (!$user) {
+//            return new JsonResponse(['code' => 500, 'message' => 'Произошла ошибка во время выполнения регистраций, пожалуйста, попробуйте позднее'], 400);
+//        }
 
         $token = $user->createToken('token_authenticate');
 
