@@ -4,19 +4,27 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
-use App\Models\Message;
+use App\Repository\MessageRepository;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 
-final class MainController
+final class MainController extends Controller
 {
+    private MessageRepository $repository;
+
+    /**
+     * @param MessageRepository $repository
+     */
+    public function __construct(MessageRepository $repository)
+    {
+        $this->repository = $repository;
+    }
 
     public function index(Request $request)
     {
-        $perPage = $request->get('per_page');
+        $perPage = $request->get('per_page', 20);
 
-        $messages = Message::query()
-            ->paginate($perPage);
+        $messages = $this->repository->paginate($perPage);
 
         if ($messages->isEmpty()) {
             return new JsonResponse(['code' => 200, 'message' => 'Нет сообщений']);

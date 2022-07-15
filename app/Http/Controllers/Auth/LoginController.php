@@ -23,7 +23,6 @@ final class LoginController extends Controller
         $email = $request->input('login');
         $password = $request->input('password');
 
-
         $user = $this->service->loginCheck(email: $email, password: $password);
 
         if (!$user) {
@@ -32,8 +31,7 @@ final class LoginController extends Controller
 
         $token = $user->createToken('token_authenticate');
 
-        return new JsonResponse(['code' => 200, 'message' =>
-            [
+        return new JsonResponse(['code' => 200, 'message' => [
                 'token' => $token->plainTextToken
             ]
         ]);
