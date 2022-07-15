@@ -20,19 +20,8 @@ chown:
 	docker-compose exec php-fpm chmod -R 755 /var/www/storage
 
 ###################### BACKEND COMMANDS
-
-# Integration tests
-run-tests: pre-tests
-	docker-compose exec mariadb mysql -uroot -proot -e 'drop database if exists taptar_test; create database taptar_test' && \
- 	docker-compose exec php-cli php artisan cache:clear && \
- 	docker-compose exec php-cli php artisan permission:cache-reset && \
- 	docker-compose exec php-cli php artisan migrate --seed --env=tests && \
- 	docker-compose exec php-cli php artisan test --env=tests
-
-# Running commands before run tests
-pre-tests:
-	docker-compose exec php-cli php artisan key:generate --env=tests
-	docker-compose exec php-cli php artisan jwt:secret --env=tests
+key-generate:
+	docker-compose exec php-cli php artisan key:generate
 
 laravel-route:
 	docker-compose exec php-cli php artisan route:cache
